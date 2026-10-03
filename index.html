@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hayyo Results - Student Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.header { background: white; padding: 30px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.header h1 { color: #333; font-size: 2em; }
+.header p { color: #666; margin-top: 5px; }
+.card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px; }
+.btn { background: #4CAF50; color: white; padding: 14px 24px; border: none; border-radius: 10px; font-size: 1em; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 10px; }
+.btn:hover { background: #45a049; transform: translateY(-2px); }
+.btn-blue { background: #2196F3; } .btn-blue:hover { background: #1976D2; }
+.btn-red { background: #f44336; } .btn-red:hover { background: #d32f2f; }
+.btn-gray { background: #607D8B; } .btn-gray:hover { background: #455A64; }
+.btn-google { background: white; color: #444; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn-google:hover { background: #f5f5f5; border-color: #4CAF50; }
+.input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; margin-bottom: 15px; }
+.input:focus { outline: none; border-color: #4CAF50; }
+select.input { background: white; }
+.hidden { display: none !important; }
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 1em; font-weight: bold; cursor: pointer; background: white; color: #333; min-width: 120px; transition: 0.3s; }
+.tab-btn.active { background: #4CAF50; color: white; }
+.tab-btn:hover { transform: translateY(-2px); }
+.alert { padding: 15px; border-radius: 8px; margin-bottom: 15px; font-weight: 500; }
+.alert-success { background: #d4edda; color: #155724; }
+.alert-error { background: #f8d7da; color: #721c24; }
+.alert-info { background: #d1ecf1; color: #0c5460; }
+.marks-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.marks-table th, .marks-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+.marks-table th { background: #4CAF50; color: white; }
+.marks-table tr:hover { background: #f5f5f5; }
+.total-row { font-weight: bold; background: #e0e0e0; }
+.child-card { background: #f9f9f9; border: 2px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
+.child-card:hover { border-color: #4CAF50; transform: translateX(5px); }
+.teacher-card { background: #f9f9f9; border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+.badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-left: 10px; }
+.badge-green { background: #d4edda; color: #155724; }
+.badge-red { background: #f8d7da; color: #721c24; }
+.badge-yellow { background: #fff3cd; color: #856404; }
+.section-title { font-size: 1.3em; color: #333; margin: 20px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #4CAF50; }
+.upload-area { border: 3px dashed #4CAF50; padding: 30px; text-align: center; border-radius: 10px; margin-bottom: 20px; background: #f9f9f9; }
+.upload-area input[type="file"] { display: none; }
+.upload-label { background: #4CAF50; color: white; padding: 12px 24px; border-radius: 8px; cursor: pointer; display: inline-block; font-weight: bold; }
+.subject-tag { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 5px 12px; border-radius: 15px; margin: 3px; font-size: 0.85em; }
+@media (max-width: 768px) { .tabs { flex-direction: column; } .tab-btn { width: 100%; } .header h1 { font-size: 1.5em; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🎓 Hayyo Results Portal</h1>
+  <p>School Results Management System</p>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="card" style="text-align:center;">
+  <h2 style="margin-bottom:20px;">Welcome</h2>
+  <p style="color:#666; margin-bottom:30px;">Sign in with your Google account</p>
+  <button class="btn btn-google" onclick="signInWithGoogle()">
+    <img src="https://www.google.com/favicon.ico" width="20"> Sign in with Google
+  </button>
+  <p style="color:#999; margin-top:20px; font-size:0.9em;">No password needed — Google handles security</p>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" class="hidden">
+
+  <!-- USER INFO BAR -->
+  <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px 25px;">
+    <div>
+      <strong id="userName">Loading...</strong>
+      <span class="badge badge-green" id="userRole">...</span>
+    </div>
+    <button class="btn btn-red" style="width:auto; padding:10px 20px; margin:0;" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- ============ DIRECTOR DASHBOARD ============ -->
+  <div id="directorDashboard" class="hidden">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showDirectorTab('teachers')">👨‍🏫 Teachers</button>
+      <button class="tab-btn" onclick="showDirectorTab('uploads')">📤 Uploads</button>
+      <button class="tab-btn" onclick="showDirectorTab('complaints')">📢 Complaints</button>
+    </div>
+
+    <!-- Teachers Tab -->
+    <div id="teachersTab" class="card">
+      <h2 class="section-title">👨‍🏫 Manage Teachers</h2>
+      <div style="background:#f0f8ff; padding:20px; border-radius:10px; margin-bottom:20px;">
+        <h3 style="margin-bottom:15px;">➕ Add New Teacher</h3>
+        <input type="text" id="tName" class="input" placeholder="Teacher Name">
+        <input type="email" id="tEmail" class="input" placeholder="Teacher Gmail">
+        <select id="tGrade" class="input">
+          <option value="">Select Grade</option>
+          <option value="9">Grade 9</option><option value="10">Grade 10</option>
+          <option value="11">Grade 11</option><option value="12">Grade 12</option>
+        </select>
+        <select id="tSection" class="input">
+          <option value="">Select Section</option>
+          <option value="A">A</option><option value="B">B</option>
+          <option value="C">C</option><option value="D">D</option>
+        </select>
+        <button class="btn" onclick="addTeacher()">Add Teacher</button>
+      </div>
+      <h3 style="margin-bottom:15px;">📋 Existing Teachers</h3>
+      <div id="teachersList"></div>
+    </div>
+
+    <!-- Uploads Tab -->
+    <div id="uploadsTab" class="card hidden">
+      <h2 class="section-title">📊 All Uploads</h2>
+      <div id="allUploads"></div>
+    </div>
+
+    <!-- Complaints Tab -->
+    <div id="complaintsTab" class="card hidden">
+      <h2 class="section-title">📢 Student Complaints</h2>
+      <div id="complaintsList"></div>
+    </div>
+  </div>
+
+  <!-- ============ TEACHER DASHBOARD ============ -->
+  <div id="teacherDashboard" class="hidden">
+    <div class="card">
+      <h2 class="section-title">📤 Upload Results</h2>
+      <p style="color:#666; margin-bottom:15px;">
+        Your Class: <strong id="teacherClass"></strong>
+      </p>
+      
+      <label style="display:block; margin-bottom:8px; font-weight:bold;">Semester:</label>
+      <select id="uploadSemester" class="input">
+        <option value="1">1st Semester</option>
+        <option value="2">2nd Semester</option>
+      </select>
+
+      <label style="display:block; margin-bottom:8px; font-weight:bold;">Assessment Period:</label>
+      <select id="uploadPeriod" class="input">
+        <option value="Q1">Quarter 1 (50 marks)</option>
+        <option value="Q2">Quarter 2 (50 marks)</option>
+        <option value="FULL">Semester Full (100 marks)</option>
+      </select>
+
+      <div class="upload-area">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFileUpload()">
+        <label for="fileInput" class="upload-label">📁 Choose Excel File</label>
+        <p style="margin-top:15px; color:#666;">Format: Name | Student Email | Parent Email | Subject1 | Subject2 | ...</p>
+      </div>
+
+      <div id="uploadStatus"></div>
+      <button class="btn hidden" id="publishUploadBtn" onclick="publishUpload()">🚀 Upload & Publish</button>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">📋 My Uploads</h2>
+      <div id="teacherUploads"></div>
+    </div>
+  </div>
+
+  <!-- ============ STUDENT VIEW ============ -->
+  <div id="studentView" class="hidden">
+    <div class="card">
+      <h2 class="section-title">📘 My Results</h2>
+      <div id="studentResult"></div>
+    </div>
+  </div>
+
+  <!-- ============ PARENT VIEW ============ -->
+  <div id="parentView" class="hidden">
+    <div class="card">
+      <h2 class="section-title">👪 My Children</h2>
+      <div id="parentChildren"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ============ CONFIGURATION ============
+const SUPABASE_URL = 'https://uoqfqqmtpmccrrbugeqg.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gkvlwGnTYLMFDa_FF08t5A_jW6MY5XH';
+
+// ============ INIT SUPABASE ============
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let currentRole = null;
+let currentTeacher = null;
+let pendingUpload = null;
+
+// ============ AUTH ============
+async function signInWithGoogle() {
+  const { error } = await db.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + window.location.pathname }
+  });
+  if (error) alert('Login error: ' + error.message);
+}
+
+async function logout() {
+  await db.auth.signOut();
+  location.reload();
+}
+
+// ============ CHECK USER ON LOAD ============
+async function checkUser() {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('mainApp').classList.add('hidden');
+    return;
+  }
+  currentUser = session.user;
+  await detectRole();
+}
+
+// ============ DETECT ROLE ============
+async function detectRole() {
+  const email = currentUser.email;
+  
+  // Check Director
+  const { data: dir } = await db.from('directors').select('*').eq('email', email).maybeSingle();
+  if (dir) {
+    currentRole = 'director';
+    document.getElementById('userName').textContent = dir.name;
+    document.getElementById('userRole').textContent = 'Director';
+    document.getElementById('userRole').className = 'badge badge-green';
+    showApp();
+    document.getElementById('directorDashboard').classList.remove('hidden');
+    loadTeachers();
+    return;
+  }
+
+  // Check Teacher
+  const { data: teacher } = await db.from('teachers').select('*').eq('email', email).maybeSingle();
+  if (teacher && teacher.active) {
+    currentRole = 'teacher';
+    currentTeacher = teacher;
+    document.getElementById('userName').textContent = teacher.name;
+    document.getElementById('userRole').textContent = `Teacher - Grade ${teacher.grade}${teacher.section}`;
+    document.getElementById('userRole').className = 'badge badge-blue';
+    document.getElementById('teacherClass').textContent = `Grade ${teacher.grade}${teacher.section}`;
+    showApp();
+    document.getElementById('teacherDashboard').classList.remove('hidden');
+    loadTeacherUploads();
+    return;
+  }
+
+  // Check Student
+  const { data: student } = await db.from('students').select('*').eq('email', email).maybeSingle();
+  if (student) {
+    currentRole = 'student';
+    document.getElementById('userName').textContent = student.name;
+    document.getElementById('userRole').textContent = `Student - Grade ${student.grade}${student.section}`;
+    document.getElementById('userRole').className = 'badge badge-green';
+    showApp();
+    document.getElementById('studentView').classList.remove('hidden');
+    loadStudentResults(student);
+    return;
+  }
+
+  // Check Parent
+  const { data: parent } = await db.from('parents').select('*').eq('email', email).maybeSingle();
+  if (parent) {
+    currentRole = 'parent';
+    document.getElementById('userName').textContent = parent.name;
+    document.getElementById('userRole').textContent = 'Parent';
+    document.getElementById('userRole').className = 'badge badge-blue';
+    showApp();
+    document.getElementById('parentView').classList.remove('hidden');
+    loadParentChildren(parent);
+    return;
+  }
+
+  // Not found
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginScreen').innerHTML = `
+    <div class="alert alert-error">
+      ❌ Access Denied<br>
+      <small>${email} is not registered in the system.</small>
+    </div>
+    <button class="btn btn-red" onclick="logout()">Logout</button>
+  `;
+}
+
+function showApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+}
+
+// ============ DIRECTOR: TEACHERS ============
+async function loadTeachers() {
+  const { data } = await db.from('teachers').select('*').order('grade').order('section');
+  const list = document.getElementById('teachersList');
+  if (!data || data.length === 0) {
+    list.innerHTML = '<p style="color:#666;">No teachers added yet.</p>';
+    return;
+  }
+  list.innerHTML = data.map(t => `
+    <div class="teacher-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>${t.name}</strong> ${t.active ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">Inactive</span>'}
+          <div style="color:#666; font-size:0.9em; margin-top:5px;">
+            📧 ${t.email} | 🎓 Grade ${t.grade}${t.section}
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-red" style="width:auto; padding:8px 15px; margin:0;" onclick="deleteTeacher('${t.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function addTeacher() {
+  const name = document.getElementById('tName').value.trim();
+  const email = document.getElementById('tEmail').value.trim().toLowerCase();
+  const grade = document.getElementById('tGrade').value;
+  const section = document.getElementById('tSection').value;
+
+  if (!name || !email || !grade || !section) {
+    alert('Please fill all fields');
+    return;
+  }
+
+  const { error } = await db.from('teachers').insert({
+    name, email, grade: parseInt(grade), section
+  });
+
+  if (error) {
+    alert('Error: ' + error.message);
+  } else {
+    alert('✅ Teacher added!');
+    document.getElementById('tName').value = '';
+    document.getElementById('tEmail').value = '';
+    document.getElementById('tGrade').value = '';
+    document.getElementById('tSection').value = '';
+    loadTeachers();
+  }
+}
+
+async function deleteTeacher(id) {
+  if (!confirm('Delete this teacher?')) return;
+  await db.from('teachers').delete().eq('id', id);
+  loadTeachers();
+}
+
+function showDirectorTab(tab) {
+  document.querySelectorAll('#directorDashboard .tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('teachersTab').classList.add('hidden');
+  document.getElementById('uploadsTab').classList.add('hidden');
+  document.getElementById('complaintsTab').classList.add('hidden');
+  document.getElementById(tab + 'Tab').classList.remove('hidden');
+  if (tab === 'uploads') loadAllUploads();
+  if (tab === 'complaints') loadComplaints();
+}
+
+async function loadAllUploads() {
+  const { data } = await db.from('uploads').select('*').order('uploaded_at', { ascending: false });
+  const el = document.getElementById('allUploads');
+  if (!data || data.length === 0) {
+    el.innerHTML = '<p style="color:#666;">No uploads yet.</p>';
+    return;
+  }
+  el.innerHTML = data.map(u => `
+    <div class="teacher-card">
+      <strong>Grade ${u.grade}${u.section}</strong> - ${u.teacher_email}
+      <div style="color:#666; font-size:0.9em; margin-top:5px;">
+        📅 Sem ${u.semester} ${u.period} | 👥 ${u.student_count} students
+        <br>📚 Subjects: ${(u.subjects || []).map(s => `<span class="subject-tag">${s}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function loadComplaints() {
+  const { data } = await db.from('complaints').select('*').order('created_at', { ascending: false });
+  const el = document.getElementById('complaintsList');
+  if (!data || data.length === 0) {
+    el.innerHTML = '<p style="color:#666;">No complaints yet.</p>';
+    return;
+  }
+  el.innerHTML = data.map(c => `
+    <div class="teacher-card" style="border-left-color: ${c.status === 'RESOLVED' ? '#4CAF50' : c.status === 'REJECTED' ? '#f44336' : '#ff9800'};">
+      <strong>${c.student_email}</strong>
+      <span class="badge ${c.status === 'RESOLVED' ? 'badge-green' : c.status === 'REJECTED' ? 'badge-red' : 'badge-yellow'}">${c.status}</span>
+      <div style="margin-top:8px;">
+        <strong>Subject:</strong> ${c.subject} | <strong>Sem ${c.semester} ${c.period}</strong>
+      </div>
+      <div style="margin-top:8px; color:#555;">"${c.message}"</div>
+      ${c.status === 'PENDING' ? `
+        <div style="margin-top:10px;">
+          <input type="number" id="newMark_${c.id}" class="input" placeholder="New mark (optional)" style="width:200px; display:inline-block;">
+          <input type="text" id="reply_${c.id}" class="input" placeholder="Reply message" style="width:300px; display:inline-block;">
+          <button class="btn" style="width:auto; padding:8px 15px; display:inline-block;" onclick="resolveComplaint('${c.id}')">✅ Resolve</button>
+          <button class="btn btn-red" style="width:auto; padding:8px 15px; display:inline-block;" onclick="rejectComplaint('${c.id}')">❌ Reject</button>
+        </div>
+      ` : ''}
+    </div>
+  `).join('');
+}
+
+async function resolveComplaint(id) {
+  const newMark = document.getElementById('newMark_' + id).value;
+  const reply = document.getElementById('reply_' + id).value || 'Resolved';
+  
+  // Update complaint
+  await db.from('complaints').update({ status: 'RESOLVED' }).eq('id', id);
+  
+  // Add reply
+  await db.from('complaint_replies').insert({
+    complaint_id: id,
+    replied_by: currentUser.email,
+    message: reply,
+    new_mark: newMark ? parseFloat(newMark) : null
+  });
+
+  // If new mark provided, update marks table
+  if (newMark) {
+    const { data: complaint } = await db.from('complaints').select('*').eq('id', id).single();
+    if (complaint) {
+      await db.from('marks')
+        .update({ score: parseFloat(newMark) })
+        .eq('student_email', complaint.student_email)
+        .eq('subject', complaint.subject)
+        .eq('semester', complaint.semester)
+        .eq('period', complaint.period);
+    }
+  }
+
+  alert('✅ Complaint resolved!');
+  loadComplaints();
+}
+
+async function rejectComplaint(id) {
+  const reply = document.getElementById('reply_' + id).value || 'Rejected';
+  await db.from('complaints').update({ status: 'REJECTED' }).eq('id', id);
+  await db.from('complaint_replies').insert({
+    complaint_id: id,
+    replied_by: currentUser.email,
+    message: reply
+  });
+  alert('Complaint rejected');
+  loadComplaints();
+}
+
+// ============ TEACHER: UPLOAD ============
+function handleFileUpload() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      if (rows.length < 2) {
+        showUploadStatus('❌ File is empty', 'error');
+        return;
+      }
+
+      const headers = rows[0].map(h => (h || '').toString().trim());
+      const fixed = ['name', 'student email', 'parent email'];
+      const subjects = headers.filter(h => h && !fixed.includes(h.toLowerCase()));
+
+      if (subjects.length === 0) {
+        showUploadStatus('❌ No subjects detected', 'error');
+        return;
+      }
+
+      const students = [];
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length === 0) continue;
+        const s = {};
+        headers.forEach((h, idx) => { s[h] = row[idx]; });
+        if (s['Student Email'] || s['student email']) students.push(s);
+      }
+
+      pendingUpload = { headers, subjects, students };
+      showUploadStatus(`✅ Detected ${subjects.length} subjects, ${students.length} students`, 'success');
+      document.getElementById('publishUploadBtn').classList.remove('hidden');
+    } catch (err) {
+      showUploadStatus('❌ Error: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function showUploadStatus(msg, type) {
+  document.getElementById('uploadStatus').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+}
+
+async function publishUpload() {
+  if (!pendingUpload || !currentTeacher) return;
+  const semester = parseInt(document.getElementById('uploadSemester').value);
+  const period = document.getElementById('uploadPeriod').value;
+
+  document.getElementById('publishUploadBtn').textContent = '⏳ Uploading...';
+  document.getElementById('publishUploadBtn').disabled = true;
+
+  try {
+    const maxScore = period === 'FULL' ? 100 : 50;
+
+    for (const student of pendingUpload.students) {
+      const emailKey = Object.keys(student).find(k => k.toLowerCase() === 'student email');
+      const nameKey = Object.keys(student).find(k => k.toLowerCase() === 'name');
+      const parentKey = Object.keys(student).find(k => k.toLowerCase() === 'parent email');
+      
+      const studentEmail = (student[emailKey] || '').toString().trim().toLowerCase();
+      const studentName = (student[nameKey] || '').toString().trim();
+      const parentEmail = parentKey ? (student[parentKey] || '').toString().trim().toLowerCase() : null;
+
+      if (!studentEmail || !studentName) continue;
+
+      // Upsert student
+      await db.from('students').upsert({
+        email: studentEmail,
+        name: studentName,
+        parent_email: parentEmail || null,
+        grade: currentTeacher.grade,
+        section: currentTeacher.section
+      }, { onConflict: 'email' });
+
+      // Upsert parent
+      if (parentEmail) {
+        await db.from('parents').upsert({ email: parentEmail, name: parentEmail }, { onConflict: 'email' });
+      }
+
+      // Insert marks for each subject
+      for (const subject of pendingUpload.subjects) {
+        const score = parseFloat(student[subject]);
+        if (isNaN(score)) continue;
+
+        // Delete old mark if exists
+        await db.from('marks').delete()
+          .eq('student_email', studentEmail)
+          .eq('subject', subject)
+          .eq('semester', semester)
+          .eq('period', period);
+
+        await db.from('marks').insert({
+          student_email: studentEmail,
+          subject: subject,
+          score: score,
+          max_score: maxScore,
+          semester: semester,
+          period: period
+        });
+      }
+    }
+
+    // Log upload
+    await db.from('uploads').insert({
+      teacher_email: currentUser.email,
+      grade: currentTeacher.grade,
+      section: currentTeacher.section,
+      semester: semester,
+      period: period,
+      subjects: pendingUpload.subjects,
+      student_count: pendingUpload.students.length
+    });
+
+    // Calculate results
+    await calculateResults(semester, period, currentTeacher.grade, currentTeacher.section);
+
+    showUploadStatus('✅ Upload successful! Results calculated.', 'success');
+    document.getElementById('publishUploadBtn').classList.add('hidden');
+    loadTeacherUploads();
+    pendingUpload = null;
+  } catch (err) {
+    showUploadStatus('❌ Error: ' + err.message, 'error');
+  } finally {
+    document.getElementById('publishUploadBtn').textContent = '🚀 Upload & Publish';
+    document.getElementById('publishUploadBtn').disabled = false;
+  }
+}
+
+async function calculateResults(semester, period, grade, section) {
+  // Get all students in this class
+  const { data: students } = await db.from('students').select('*').eq('grade', grade).eq('section', section);
+  if (!students) return;
+
+  const results = [];
+  for (const s of students) {
+    const { data: marks } = await db.from('marks').select('*')
+      .eq('student_email', s.email).eq('semester', semester).eq('period', period);
+    
+    if (!marks || marks.length === 0) continue;
+
+    const total = marks.reduce((sum, m) => sum + parseFloat(m.score), 0);
+    const average = total / marks.length;
+
+    results.push({ email: s.email, total, average });
+  }
+
+  // Rank
+  results.sort((a, b) => b.total - a.total);
+
+  for (let i = 0; i < results.length; i++) {
+    const r = results[i];
+    // Delete old result
+    await db.from('results').delete()
+      .eq('student_email', r.email).eq('semester', semester).eq('period', period);
+    
+    await db.from('results').insert({
+      student_email: r.email,
+      semester: semester,
+      period: period,
+      total: r.total,
+      average: r.average.toFixed(2),
+      rank: i + 1
+    });
+  }
+}
+
+async function loadTeacherUploads() {
+  const { data } = await db.from('uploads').select('*')
+    .eq('teacher_email', currentUser.email)
+    .order('uploaded_at', { ascending: false });
+  const el = document.getElementById('teacherUploads');
+  if (!data || data.length === 0) {
+    el.innerHTML = '<p style="color:#666;">No uploads yet.</p>';
+    return;
+  }
+  el.innerHTML = data.map(u => `
+    <div class="teacher-card">
+      <strong>Sem ${u.semester} - ${u.period}</strong>
+      <div style="color:#666; font-size:0.9em; margin-top:5px;">
+        📅 ${new Date(u.uploaded_at).toLocaleDateString()} | 👥 ${u.student_count} students
+        <br>📚 ${(u.subjects || []).join(', ')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============ STUDENT VIEW ============
+async function loadStudentResults(student) {
+  const el = document.getElementById('studentResult');
+  const semesters = [1, 2];
+  const periods = ['Q1', 'Q2', 'FULL'];
+  
+  let html = `<h3>${student.name}</h3><p style="color:#666;">Grade ${student.grade}${student.section}</p>`;
+
+  for (const sem of semesters) {
+    html += `<h4 style="margin-top:20px;">📘 Semester ${sem}</h4>`;
+    
+    for (const period of periods) {
+      const { data: marks } = await db.from('marks').select('*')
+        .eq('student_email', student.email).eq('semester', sem).eq('period', period);
+      
+      if (!marks || marks.length === 0) continue;
+
+      const { data: result } = await db.from('results').select('*')
+        .eq('student_email', student.email).eq('semester', sem).eq('period', period).maybeSingle();
+
+      const total = marks.reduce((s, m) => s + parseFloat(m.score), 0);
+      const maxTotal = marks.reduce((s, m) => s + parseFloat(m.max_score || 50), 0);
+
+      html += `<h5 style="margin-top:15px; color:#2196F3;">${period === 'FULL' ? 'Full Semester' : period}</h5>`;
+      html += '<table class="marks-table"><tr><th>Subject</th><th>Score</th></tr>';
+      marks.forEach(m => {
+        html += `<tr><td>${m.subject}</td><td>${m.score}/${m.max_score}</td></tr>`;
+      });
+      html += `<tr class="total-row"><td>TOTAL</td><td>${total}/${maxTotal}</td></tr>`;
+      if (result) {
+        html += `<tr class="total-row"><td>AVERAGE</td><td>${result.average}</td></tr>`;
+        html += `<tr class="total-row"><td>RANK</td><td>${result.rank}</td></tr>`;
+      }
+      html += '</table>';
+    }
+  }
+
+  // Complaint button
+  html += `
+    <div style="margin-top:30px; padding-top:20px; border-top:2px solid #ddd;">
+      <h4>📢 Report a Problem</h4>
+      <select id="cSemester" class="input">
+        <option value="1">1st Semester</option>
+        <option value="2">2nd Semester</option>
+      </select>
+      <select id="cPeriod" class="input">
+        <option value="Q1">Quarter 1</option>
+        <option value="Q2">Quarter 2</option>
+        <option value="FULL">Full Semester</option>
+      </select>
+      <input type="text" id="cSubject" class="input" placeholder="Subject (e.g., Maths)">
+      <textarea id="cMessage" class="input" placeholder="Describe the problem..." rows="3"></textarea>
+      <button class="btn" onclick="submitComplaint('${student.email}')">📤 Submit Complaint</button>
+    </div>
+  `;
+
+  el.innerHTML = html;
+}
+
+async function submitComplaint(studentEmail) {
+  const semester = parseInt(document.getElementById('cSemester').value);
+  const period = document.getElementById('cPeriod').value;
+  const subject = document.getElementById('cSubject').value.trim();
+  const message = document.getElementById('cMessage').value.trim();
+
+  if (!subject || !message) {
+    alert('Please fill subject and message');
+    return;
+  }
+
+  const { error } = await db.from('complaints').insert({
+    student_email: studentEmail,
+    semester, period, subject,
+    issue_type: 'Wrong marks',
+    message,
+    status: 'PENDING'
+  });
+
+  if (error) {
+    alert('Error: ' + error.message);
+  } else {
+    alert('✅ Complaint submitted! Director will review it.');
+    document.getElementById('cSubject').value = '';
+    document.getElementById('cMessage').value = '';
+  }
+}
+
+// ============ PARENT VIEW ============
+async function loadParentChildren(parent) {
+  const { data: children } = await db.from('students').select('*').eq('parent_email', parent.email);
+  const el = document.getElementById('parentChildren');
+  
+  if (!children || children.length === 0) {
+    el.innerHTML = '<p style="color:#666;">No children linked to your account.</p>';
+    return;
+  }
+
+  let html = '';
+  for (const child of children) {
+    html += `
+      <div class="child-card">
+        <h3>👤 ${child.name}</h3>
+        <p style="color:#666;">Grade ${child.grade}${child.section}</p>
+        <button class="btn btn-blue" style="margin-top:10px;" onclick="viewChildResults('${child.email}')">View Full Report</button>
+        <div id="childResult_${child.email.replace(/[^a-z0-9]/g, '')}" style="margin-top:15px;"></div>
+      </div>
+    `;
+  }
+  el.innerHTML = html;
+}
+
+async function viewChildResults(childEmail) {
+  const el = document.getElementById('childResult_' + childEmail.replace(/[^a-z0-9]/g, ''));
+  const { data: child } = await db.from('students').select('*').eq('email', childEmail).single();
+  
+  let html = '';
+  for (const sem of [1, 2]) {
+    for (const period of ['Q1', 'Q2', 'FULL']) {
+      const { data: result } = await db.from('results').select('*')
+        .eq('student_email', childEmail).eq('semester', sem).eq('period', period).maybeSingle();
+      if (result) {
+        html += `<p><strong>Sem ${sem} ${period}:</strong> Total ${result.total} | Avg ${result.average} | Rank ${result.rank}</p>`;
+      }
+    }
+  }
+  el.innerHTML = html || '<p>No results yet.</p>';
+}
+
+// ============ INIT ============
+db.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) checkUser();
+});
+checkUser();
+</script>
+</body>
+</html>
