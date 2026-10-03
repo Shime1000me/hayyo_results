@@ -14,16 +14,19 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height
 .header h1 { color: #333; font-size: 2em; }
 .header p { color: #666; margin-top: 5px; }
 .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px; }
-.btn { background: #4CAF50; color: white; padding: 14px 24px; border: none; border-radius: 10px; font-size: 1em; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 10px; }
+.btn { background: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 8px; font-size: 0.95em; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 3px; }
 .btn:hover { background: #45a049; transform: translateY(-2px); }
+.btn-block { display: block; width: 100%; margin-bottom: 10px; }
 .btn-blue { background: #2196F3; } .btn-blue:hover { background: #1976D2; }
+.btn-orange { background: #FF9800; } .btn-orange:hover { background: #F57C00; }
 .btn-red { background: #f44336; } .btn-red:hover { background: #d32f2f; }
 .btn-gray { background: #607D8B; } .btn-gray:hover { background: #455A64; }
-.btn-google { background: white; color: #444; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn-small { padding: 6px 12px; font-size: 0.85em; }
+.btn-google { background: white; color: #444; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; font-size: 1em; }
 .btn-google:hover { background: #f5f5f5; border-color: #4CAF50; }
-.input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; margin-bottom: 15px; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; margin-bottom: 12px; }
 .input:focus { outline: none; border-color: #4CAF50; }
-select.input { background: white; }
 .hidden { display: none !important; }
 .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 1em; font-weight: bold; cursor: pointer; background: white; color: #333; min-width: 120px; transition: 0.3s; }
@@ -33,24 +36,35 @@ select.input { background: white; }
 .alert-success { background: #d4edda; color: #155724; }
 .alert-error { background: #f8d7da; color: #721c24; }
 .alert-info { background: #d1ecf1; color: #0c5460; }
+.alert-warning { background: #fff3cd; color: #856404; }
 .marks-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-.marks-table th, .marks-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+.marks-table th, .marks-table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
 .marks-table th { background: #4CAF50; color: white; }
 .marks-table tr:hover { background: #f5f5f5; }
 .total-row { font-weight: bold; background: #e0e0e0; }
-.child-card { background: #f9f9f9; border: 2px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
-.child-card:hover { border-color: #4CAF50; transform: translateX(5px); }
-.teacher-card { background: #f9f9f9; border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
-.badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-left: 10px; }
+.child-card, .teacher-card, .upload-card, .complaint-card { background: #f9f9f9; border: 2px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 15px; transition: 0.3s; }
+.child-card:hover { border-color: #4CAF50; }
+.teacher-card { border-left: 4px solid #2196F3; }
+.upload-card { border-left: 4px solid #4CAF50; }
+.complaint-card { border-left: 4px solid #ff9800; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; margin-left: 8px; }
 .badge-green { background: #d4edda; color: #155724; }
 .badge-red { background: #f8d7da; color: #721c24; }
 .badge-yellow { background: #fff3cd; color: #856404; }
+.badge-blue { background: #d1ecf1; color: #0c5460; }
+.badge-gray { background: #e0e0e0; color: #555; }
 .section-title { font-size: 1.3em; color: #333; margin: 20px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #4CAF50; }
 .upload-area { border: 3px dashed #4CAF50; padding: 30px; text-align: center; border-radius: 10px; margin-bottom: 20px; background: #f9f9f9; }
 .upload-area input[type="file"] { display: none; }
 .upload-label { background: #4CAF50; color: white; padding: 12px 24px; border-radius: 8px; cursor: pointer; display: inline-block; font-weight: bold; }
-.subject-tag { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 5px 12px; border-radius: 15px; margin: 3px; font-size: 0.85em; }
-@media (max-width: 768px) { .tabs { flex-direction: column; } .tab-btn { width: 100%; } .header h1 { font-size: 1.5em; } }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; font-size: 0.95em; }
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+.modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal-title { font-size: 1.3em; margin-bottom: 20px; color: #333; }
+.edit-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.edit-row input { flex: 1; margin: 0; }
+@media (max-width: 768px) { .tabs { flex-direction: column; } .tab-btn { width: 100%; } .header h1 { font-size: 1.4em; } }
 </style>
 </head>
 <body>
@@ -66,7 +80,7 @@ select.input { background: white; }
 <div id="loginScreen" class="card" style="text-align:center;">
   <h2 style="margin-bottom:20px;">Welcome</h2>
   <p style="color:#666; margin-bottom:30px;">Sign in with your Google account</p>
-  <button class="btn btn-google" onclick="signInWithGoogle()">
+  <button class="btn btn-google btn-block" onclick="signInWithGoogle()">
     <img src="https://www.google.com/favicon.ico" width="20"> Sign in with Google
   </button>
   <p style="color:#999; margin-top:20px; font-size:0.9em;">No password needed — Google handles security</p>
@@ -76,25 +90,26 @@ select.input { background: white; }
 <div id="mainApp" class="hidden">
 
   <!-- USER INFO BAR -->
-  <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px 25px;">
+  <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px 25px; flex-wrap:wrap; gap:10px;">
     <div>
       <strong id="userName">Loading...</strong>
       <span class="badge badge-green" id="userRole">...</span>
     </div>
-    <button class="btn btn-red" style="width:auto; padding:10px 20px; margin:0;" onclick="logout()">Logout</button>
+    <button class="btn btn-red" onclick="logout()">Logout</button>
   </div>
 
   <!-- ============ DIRECTOR DASHBOARD ============ -->
   <div id="directorDashboard" class="hidden">
     <div class="tabs">
-      <button class="tab-btn active" onclick="showDirectorTab('teachers')">👨‍🏫 Teachers</button>
-      <button class="tab-btn" onclick="showDirectorTab('uploads')">📤 Uploads</button>
-      <button class="tab-btn" onclick="showDirectorTab('complaints')">📢 Complaints</button>
+      <button class="tab-btn active" onclick="showDirectorTab('teachers', event)">👨‍🏫 Teachers</button>
+      <button class="tab-btn" onclick="showDirectorTab('uploads', event)">📤 Uploads</button>
+      <button class="tab-btn" onclick="showDirectorTab('complaints', event)">📢 Complaints</button>
     </div>
 
     <!-- Teachers Tab -->
     <div id="teachersTab" class="card">
       <h2 class="section-title">👨‍🏫 Manage Teachers</h2>
+      
       <div style="background:#f0f8ff; padding:20px; border-radius:10px; margin-bottom:20px;">
         <h3 style="margin-bottom:15px;">➕ Add New Teacher</h3>
         <input type="text" id="tName" class="input" placeholder="Teacher Name">
@@ -109,8 +124,9 @@ select.input { background: white; }
           <option value="A">A</option><option value="B">B</option>
           <option value="C">C</option><option value="D">D</option>
         </select>
-        <button class="btn" onclick="addTeacher()">Add Teacher</button>
+        <button class="btn btn-block" onclick="addTeacher()">Add Teacher</button>
       </div>
+      
       <h3 style="margin-bottom:15px;">📋 Existing Teachers</h3>
       <div id="teachersList"></div>
     </div>
@@ -136,27 +152,31 @@ select.input { background: white; }
         Your Class: <strong id="teacherClass"></strong>
       </p>
       
-      <label style="display:block; margin-bottom:8px; font-weight:bold;">Semester:</label>
-      <select id="uploadSemester" class="input">
-        <option value="1">1st Semester</option>
-        <option value="2">2nd Semester</option>
-      </select>
+      <div class="form-group">
+        <label>Semester:</label>
+        <select id="uploadSemester" class="input">
+          <option value="1">1st Semester</option>
+          <option value="2">2nd Semester</option>
+        </select>
+      </div>
 
-      <label style="display:block; margin-bottom:8px; font-weight:bold;">Assessment Period:</label>
-      <select id="uploadPeriod" class="input">
-        <option value="Q1">Quarter 1 (50 marks)</option>
-        <option value="Q2">Quarter 2 (50 marks)</option>
-        <option value="FULL">Semester Full (100 marks)</option>
-      </select>
+      <div class="form-group">
+        <label>Assessment Period:</label>
+        <select id="uploadPeriod" class="input">
+          <option value="Q1">Quarter 1 (50 marks)</option>
+          <option value="Q2">Quarter 2 (50 marks)</option>
+          <option value="FULL">Semester Full (100 marks)</option>
+        </select>
+      </div>
 
       <div class="upload-area">
         <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFileUpload()">
         <label for="fileInput" class="upload-label">📁 Choose Excel File</label>
-        <p style="margin-top:15px; color:#666;">Format: Name | Student Email | Parent Email | Subject1 | Subject2 | ...</p>
+        <p style="margin-top:15px; color:#666; font-size:0.9em;">Format: Name | Student Email | Parent Email | Subject1 | Subject2 | ...</p>
       </div>
 
       <div id="uploadStatus"></div>
-      <button class="btn hidden" id="publishUploadBtn" onclick="publishUpload()">🚀 Upload & Publish</button>
+      <button class="btn btn-block hidden" id="publishUploadBtn" onclick="publishUpload()">🚀 Upload to Database</button>
     </div>
 
     <div class="card">
@@ -184,6 +204,18 @@ select.input { background: white; }
 </div>
 </div>
 
+<!-- MODAL FOR EDITING -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <h3 class="modal-title" id="modalTitle">Edit</h3>
+    <div id="modalBody"></div>
+    <div style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+      <button class="btn btn-gray" onclick="closeModal()">Cancel</button>
+      <button class="btn" id="modalSaveBtn" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ============ CONFIGURATION ============
 const SUPABASE_URL = 'https://uoqfqqmtpmccrrbugeqg.supabase.co';
@@ -197,6 +229,7 @@ let currentUser = null;
 let currentRole = null;
 let currentTeacher = null;
 let pendingUpload = null;
+let modalCallback = null;
 
 // ============ AUTH ============
 async function signInWithGoogle() {
@@ -212,7 +245,7 @@ async function logout() {
   location.reload();
 }
 
-// ============ CHECK USER ON LOAD ============
+// ============ CHECK USER ============
 async function checkUser() {
   const { data: { session } } = await db.auth.getSession();
   if (!session) {
@@ -228,7 +261,7 @@ async function checkUser() {
 async function detectRole() {
   const email = currentUser.email;
   
-  // Check Director
+  // Director?
   const { data: dir } = await db.from('directors').select('*').eq('email', email).maybeSingle();
   if (dir) {
     currentRole = 'director';
@@ -241,7 +274,7 @@ async function detectRole() {
     return;
   }
 
-  // Check Teacher
+  // Teacher?
   const { data: teacher } = await db.from('teachers').select('*').eq('email', email).maybeSingle();
   if (teacher && teacher.active) {
     currentRole = 'teacher';
@@ -256,7 +289,7 @@ async function detectRole() {
     return;
   }
 
-  // Check Student
+  // Student?
   const { data: student } = await db.from('students').select('*').eq('email', email).maybeSingle();
   if (student) {
     currentRole = 'student';
@@ -269,7 +302,7 @@ async function detectRole() {
     return;
   }
 
-  // Check Parent
+  // Parent?
   const { data: parent } = await db.from('parents').select('*').eq('email', email).maybeSingle();
   if (parent) {
     currentRole = 'parent';
@@ -285,17 +318,32 @@ async function detectRole() {
   // Not found
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginScreen').innerHTML = `
-    <div class="alert alert-error">
-      ❌ Access Denied<br>
+    <div class="alert alert-error" style="text-align:center;">
+      ❌ Access Denied<br><br>
       <small>${email} is not registered in the system.</small>
     </div>
-    <button class="btn btn-red" onclick="logout()">Logout</button>
+    <button class="btn btn-red btn-block" onclick="logout()">Logout</button>
   `;
 }
 
 function showApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').classList.remove('hidden');
+}
+
+// ============ MODAL HELPERS ============
+function openModal(title, bodyHtml, callback) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('modal').classList.remove('hidden');
+  modalCallback = callback;
+}
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+  modalCallback = null;
+}
+function saveModal() {
+  if (modalCallback) modalCallback();
 }
 
 // ============ DIRECTOR: TEACHERS ============
@@ -308,15 +356,18 @@ async function loadTeachers() {
   }
   list.innerHTML = data.map(t => `
     <div class="teacher-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div>
-          <strong>${t.name}</strong> ${t.active ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">Inactive</span>'}
+          <strong>${t.name}</strong> 
+          ${t.active ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">Inactive</span>'}
           <div style="color:#666; font-size:0.9em; margin-top:5px;">
             📧 ${t.email} | 🎓 Grade ${t.grade}${t.section}
           </div>
         </div>
         <div>
-          <button class="btn btn-red" style="width:auto; padding:8px 15px; margin:0;" onclick="deleteTeacher('${t.id}')">🗑️ Delete</button>
+          <button class="btn btn-blue btn-small" onclick='editTeacher(${JSON.stringify(t).replace(/'/g, "&apos;")})'>✏️ Edit</button>
+          <button class="btn btn-orange btn-small" onclick="toggleTeacher('${t.id}', ${t.active})">${t.active ? '🚫 Disable' : '✅ Enable'}</button>
+          <button class="btn btn-red btn-small" onclick="deleteTeacher('${t.id}')">🗑️ Delete</button>
         </div>
       </div>
     </div>
@@ -329,18 +380,14 @@ async function addTeacher() {
   const grade = document.getElementById('tGrade').value;
   const section = document.getElementById('tSection').value;
 
-  if (!name || !email || !grade || !section) {
-    alert('Please fill all fields');
-    return;
-  }
+  if (!name || !email || !grade || !section) { alert('Please fill all fields'); return; }
 
   const { error } = await db.from('teachers').insert({
-    name, email, grade: parseInt(grade), section
+    name, email, grade: parseInt(grade), section, active: true
   });
 
-  if (error) {
-    alert('Error: ' + error.message);
-  } else {
+  if (error) alert('Error: ' + error.message);
+  else {
     alert('✅ Teacher added!');
     document.getElementById('tName').value = '';
     document.getElementById('tEmail').value = '';
@@ -350,15 +397,49 @@ async function addTeacher() {
   }
 }
 
+function editTeacher(t) {
+  openModal('✏️ Edit Teacher', `
+    <div class="form-group"><label>Name:</label><input type="text" id="editTName" class="input" value="${t.name}"></div>
+    <div class="form-group"><label>Gmail:</label><input type="email" id="editTEmail" class="input" value="${t.email}"></div>
+    <div class="form-group"><label>Grade:</label>
+      <select id="editTGrade" class="input">
+        ${[9,10,11,12].map(g => `<option value="${g}" ${t.grade === g ? 'selected' : ''}>Grade ${g}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group"><label>Section:</label>
+      <select id="editTSection" class="input">
+        ${['A','B','C','D'].map(s => `<option value="${s}" ${t.section === s ? 'selected' : ''}>${s}</option>`).join('')}
+      </select>
+    </div>
+  `, async () => {
+    const newName = document.getElementById('editTName').value.trim();
+    const newEmail = document.getElementById('editTEmail').value.trim().toLowerCase();
+    const newGrade = parseInt(document.getElementById('editTGrade').value);
+    const newSection = document.getElementById('editTSection').value;
+    
+    const { error } = await db.from('teachers').update({
+      name: newName, email: newEmail, grade: newGrade, section: newSection
+    }).eq('id', t.id);
+
+    if (error) alert('Error: ' + error.message);
+    else { alert('✅ Updated!'); closeModal(); loadTeachers(); }
+  });
+}
+
+async function toggleTeacher(id, currentActive) {
+  await db.from('teachers').update({ active: !currentActive }).eq('id', id);
+  loadTeachers();
+}
+
 async function deleteTeacher(id) {
-  if (!confirm('Delete this teacher?')) return;
+  if (!confirm('Delete this teacher? Their uploads will remain in the database.')) return;
   await db.from('teachers').delete().eq('id', id);
   loadTeachers();
 }
 
-function showDirectorTab(tab) {
+function showDirectorTab(tab, e) {
   document.querySelectorAll('#directorDashboard .tab-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  e.target.classList.add('active');
   document.getElementById('teachersTab').classList.add('hidden');
   document.getElementById('uploadsTab').classList.add('hidden');
   document.getElementById('complaintsTab').classList.add('hidden');
@@ -367,33 +448,84 @@ function showDirectorTab(tab) {
   if (tab === 'complaints') loadComplaints();
 }
 
+// ============ UPLOADS ============
 async function loadAllUploads() {
   const { data } = await db.from('uploads').select('*').order('uploaded_at', { ascending: false });
   const el = document.getElementById('allUploads');
-  if (!data || data.length === 0) {
-    el.innerHTML = '<p style="color:#666;">No uploads yet.</p>';
-    return;
-  }
+  if (!data || data.length === 0) { el.innerHTML = '<p style="color:#666;">No uploads yet.</p>'; return; }
   el.innerHTML = data.map(u => `
-    <div class="teacher-card">
-      <strong>Grade ${u.grade}${u.section}</strong> - ${u.teacher_email}
-      <div style="color:#666; font-size:0.9em; margin-top:5px;">
-        📅 Sem ${u.semester} ${u.period} | 👥 ${u.student_count} students
-        <br>📚 Subjects: ${(u.subjects || []).map(s => `<span class="subject-tag">${s}</span>`).join('')}
+    <div class="upload-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <strong>Grade ${u.grade}${u.section}</strong> - ${u.teacher_email}
+          <div style="color:#666; font-size:0.9em; margin-top:5px;">
+            📅 Sem ${u.semester} ${u.period} | 👥 ${u.student_count} students
+            <br>📚 Subjects: ${(u.subjects || []).join(', ')}
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-blue btn-small" onclick="viewUploadMarks('${u.id}')">👁️ View Marks</button>
+          <button class="btn btn-orange btn-small" onclick="deleteUpload('${u.id}')">🗑️ Delete</button>
+        </div>
       </div>
     </div>
   `).join('');
 }
 
+async function viewUploadMarks(uploadId) {
+  const { data: up } = await db.from('uploads').select('*').eq('id', uploadId).single();
+  if (!up) return;
+
+  const { data: marks } = await db.from('marks').select('*')
+    .eq('semester', up.semester).eq('period', up.period);
+
+  const { data: students } = await db.from('students').select('*')
+    .eq('grade', up.grade).eq('section', up.section);
+
+  let html = '<div style="max-height:400px; overflow-y:auto;">';
+  for (const s of (students || [])) {
+    const studentMarks = (marks || []).filter(m => m.student_email === s.email);
+    if (studentMarks.length === 0) continue;
+    html += `<div style="background:#f9f9f9; padding:10px; margin:5px 0; border-radius:5px;">
+      <strong>${s.name}</strong> (${s.email})<br>
+      ${studentMarks.map(m => `${m.subject}: <strong>${m.score}</strong>`).join(' | ')}
+    </div>`;
+  }
+  html += '</div>';
+  openModal('📊 Marks: Grade ' + up.grade + up.section + ' - Sem ' + up.semester + ' ' + up.period, html, () => closeModal());
+}
+
+async function deleteUpload(uploadId) {
+  if (!confirm('Delete this upload? All marks from it will be deleted!')) return;
+  const { data: up } = await db.from('uploads').select('*').eq('id', uploadId).single();
+  if (!up) return;
+
+  // Get students in class
+  const { data: students } = await db.from('students').select('email')
+    .eq('grade', up.grade).eq('section', up.section);
+
+  // Delete marks
+  for (const s of (students || [])) {
+    await db.from('marks').delete()
+      .eq('student_email', s.email)
+      .eq('semester', up.semester).eq('period', up.period);
+    await db.from('results').delete()
+      .eq('student_email', s.email)
+      .eq('semester', up.semester).eq('period', up.period);
+  }
+
+  await db.from('uploads').delete().eq('id', uploadId);
+  alert('✅ Upload deleted');
+  loadAllUploads();
+}
+
+// ============ COMPLAINTS ============
 async function loadComplaints() {
   const { data } = await db.from('complaints').select('*').order('created_at', { ascending: false });
   const el = document.getElementById('complaintsList');
-  if (!data || data.length === 0) {
-    el.innerHTML = '<p style="color:#666;">No complaints yet.</p>';
-    return;
-  }
+  if (!data || data.length === 0) { el.innerHTML = '<p style="color:#666;">No complaints yet.</p>'; return; }
   el.innerHTML = data.map(c => `
-    <div class="teacher-card" style="border-left-color: ${c.status === 'RESOLVED' ? '#4CAF50' : c.status === 'REJECTED' ? '#f44336' : '#ff9800'};">
+    <div class="complaint-card">
       <strong>${c.student_email}</strong>
       <span class="badge ${c.status === 'RESOLVED' ? 'badge-green' : c.status === 'REJECTED' ? 'badge-red' : 'badge-yellow'}">${c.status}</span>
       <div style="margin-top:8px;">
@@ -401,11 +533,11 @@ async function loadComplaints() {
       </div>
       <div style="margin-top:8px; color:#555;">"${c.message}"</div>
       ${c.status === 'PENDING' ? `
-        <div style="margin-top:10px;">
-          <input type="number" id="newMark_${c.id}" class="input" placeholder="New mark (optional)" style="width:200px; display:inline-block;">
-          <input type="text" id="reply_${c.id}" class="input" placeholder="Reply message" style="width:300px; display:inline-block;">
-          <button class="btn" style="width:auto; padding:8px 15px; display:inline-block;" onclick="resolveComplaint('${c.id}')">✅ Resolve</button>
-          <button class="btn btn-red" style="width:auto; padding:8px 15px; display:inline-block;" onclick="rejectComplaint('${c.id}')">❌ Reject</button>
+        <div style="margin-top:12px;">
+          <input type="number" id="newMark_${c.id}" class="input" placeholder="New mark (optional)">
+          <input type="text" id="reply_${c.id}" class="input" placeholder="Reply message">
+          <button class="btn btn-small" onclick="resolveComplaint('${c.id}')">✅ Resolve</button>
+          <button class="btn btn-red btn-small" onclick="rejectComplaint('${c.id}')">❌ Reject</button>
         </div>
       ` : ''}
     </div>
@@ -416,30 +548,22 @@ async function resolveComplaint(id) {
   const newMark = document.getElementById('newMark_' + id).value;
   const reply = document.getElementById('reply_' + id).value || 'Resolved';
   
-  // Update complaint
   await db.from('complaints').update({ status: 'RESOLVED' }).eq('id', id);
-  
-  // Add reply
   await db.from('complaint_replies').insert({
-    complaint_id: id,
-    replied_by: currentUser.email,
-    message: reply,
+    complaint_id: id, replied_by: currentUser.email, message: reply,
     new_mark: newMark ? parseFloat(newMark) : null
   });
 
-  // If new mark provided, update marks table
   if (newMark) {
     const { data: complaint } = await db.from('complaints').select('*').eq('id', id).single();
     if (complaint) {
-      await db.from('marks')
-        .update({ score: parseFloat(newMark) })
+      await db.from('marks').update({ score: parseFloat(newMark) })
         .eq('student_email', complaint.student_email)
         .eq('subject', complaint.subject)
         .eq('semester', complaint.semester)
         .eq('period', complaint.period);
     }
   }
-
   alert('✅ Complaint resolved!');
   loadComplaints();
 }
@@ -448,9 +572,7 @@ async function rejectComplaint(id) {
   const reply = document.getElementById('reply_' + id).value || 'Rejected';
   await db.from('complaints').update({ status: 'REJECTED' }).eq('id', id);
   await db.from('complaint_replies').insert({
-    complaint_id: id,
-    replied_by: currentUser.email,
-    message: reply
+    complaint_id: id, replied_by: currentUser.email, message: reply
   });
   alert('Complaint rejected');
   loadComplaints();
@@ -469,19 +591,13 @@ function handleFileUpload() {
       const sheet = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      if (rows.length < 2) {
-        showUploadStatus('❌ File is empty', 'error');
-        return;
-      }
+      if (rows.length < 2) { showUploadStatus('❌ File is empty', 'error'); return; }
 
       const headers = rows[0].map(h => (h || '').toString().trim());
       const fixed = ['name', 'student email', 'parent email'];
       const subjects = headers.filter(h => h && !fixed.includes(h.toLowerCase()));
 
-      if (subjects.length === 0) {
-        showUploadStatus('❌ No subjects detected', 'error');
-        return;
-      }
+      if (subjects.length === 0) { showUploadStatus('❌ No subjects detected', 'error'); return; }
 
       const students = [];
       for (let i = 1; i < rows.length; i++) {
@@ -489,7 +605,8 @@ function handleFileUpload() {
         if (!row || row.length === 0) continue;
         const s = {};
         headers.forEach((h, idx) => { s[h] = row[idx]; });
-        if (s['Student Email'] || s['student email']) students.push(s);
+        const emailKey = headers.find(h => h.toLowerCase() === 'student email');
+        if (s[emailKey]) students.push(s);
       }
 
       pendingUpload = { headers, subjects, students };
@@ -528,55 +645,40 @@ async function publishUpload() {
 
       if (!studentEmail || !studentName) continue;
 
-      // Upsert student
       await db.from('students').upsert({
-        email: studentEmail,
-        name: studentName,
+        email: studentEmail, name: studentName,
         parent_email: parentEmail || null,
-        grade: currentTeacher.grade,
-        section: currentTeacher.section
+        grade: currentTeacher.grade, section: currentTeacher.section
       }, { onConflict: 'email' });
 
-      // Upsert parent
       if (parentEmail) {
         await db.from('parents').upsert({ email: parentEmail, name: parentEmail }, { onConflict: 'email' });
       }
 
-      // Insert marks for each subject
       for (const subject of pendingUpload.subjects) {
         const score = parseFloat(student[subject]);
         if (isNaN(score)) continue;
 
-        // Delete old mark if exists
         await db.from('marks').delete()
-          .eq('student_email', studentEmail)
-          .eq('subject', subject)
-          .eq('semester', semester)
-          .eq('period', period);
+          .eq('student_email', studentEmail).eq('subject', subject)
+          .eq('semester', semester).eq('period', period);
 
         await db.from('marks').insert({
-          student_email: studentEmail,
-          subject: subject,
-          score: score,
-          max_score: maxScore,
-          semester: semester,
-          period: period
+          student_email: studentEmail, subject: subject,
+          score: score, max_score: maxScore,
+          semester: semester, period: period
         });
       }
     }
 
-    // Log upload
     await db.from('uploads').insert({
       teacher_email: currentUser.email,
-      grade: currentTeacher.grade,
-      section: currentTeacher.section,
-      semester: semester,
-      period: period,
+      grade: currentTeacher.grade, section: currentTeacher.section,
+      semester: semester, period: period,
       subjects: pendingUpload.subjects,
       student_count: pendingUpload.students.length
     });
 
-    // Calculate results
     await calculateResults(semester, period, currentTeacher.grade, currentTeacher.section);
 
     showUploadStatus('✅ Upload successful! Results calculated.', 'success');
@@ -586,13 +688,12 @@ async function publishUpload() {
   } catch (err) {
     showUploadStatus('❌ Error: ' + err.message, 'error');
   } finally {
-    document.getElementById('publishUploadBtn').textContent = '🚀 Upload & Publish';
+    document.getElementById('publishUploadBtn').textContent = '🚀 Upload to Database';
     document.getElementById('publishUploadBtn').disabled = false;
   }
 }
 
 async function calculateResults(semester, period, grade, section) {
-  // Get all students in this class
   const { data: students } = await db.from('students').select('*').eq('grade', grade).eq('section', section);
   if (!students) return;
 
@@ -600,31 +701,21 @@ async function calculateResults(semester, period, grade, section) {
   for (const s of students) {
     const { data: marks } = await db.from('marks').select('*')
       .eq('student_email', s.email).eq('semester', semester).eq('period', period);
-    
     if (!marks || marks.length === 0) continue;
-
     const total = marks.reduce((sum, m) => sum + parseFloat(m.score), 0);
     const average = total / marks.length;
-
     results.push({ email: s.email, total, average });
   }
 
-  // Rank
   results.sort((a, b) => b.total - a.total);
 
   for (let i = 0; i < results.length; i++) {
     const r = results[i];
-    // Delete old result
     await db.from('results').delete()
       .eq('student_email', r.email).eq('semester', semester).eq('period', period);
-    
     await db.from('results').insert({
-      student_email: r.email,
-      semester: semester,
-      period: period,
-      total: r.total,
-      average: r.average.toFixed(2),
-      rank: i + 1
+      student_email: r.email, semester, period,
+      total: r.total, average: r.average.toFixed(2), rank: i + 1
     });
   }
 }
@@ -634,36 +725,45 @@ async function loadTeacherUploads() {
     .eq('teacher_email', currentUser.email)
     .order('uploaded_at', { ascending: false });
   const el = document.getElementById('teacherUploads');
-  if (!data || data.length === 0) {
-    el.innerHTML = '<p style="color:#666;">No uploads yet.</p>';
-    return;
-  }
+  if (!data || data.length === 0) { el.innerHTML = '<p style="color:#666;">No uploads yet.</p>'; return; }
   el.innerHTML = data.map(u => `
-    <div class="teacher-card">
-      <strong>Sem ${u.semester} - ${u.period}</strong>
-      <div style="color:#666; font-size:0.9em; margin-top:5px;">
-        📅 ${new Date(u.uploaded_at).toLocaleDateString()} | 👥 ${u.student_count} students
-        <br>📚 ${(u.subjects || []).join(', ')}
+    <div class="upload-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <strong>Sem ${u.semester} - ${u.period}</strong>
+          <div style="color:#666; font-size:0.9em; margin-top:5px;">
+            📅 ${new Date(u.uploaded_at).toLocaleDateString()} | 👥 ${u.student_count} students
+            <br>📚 ${(u.subjects || []).join(', ')}
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-blue btn-small" onclick="viewUploadMarks('${u.id}')">👁️ View</button>
+          <button class="btn btn-orange btn-small" onclick="replaceUpload('${u.id}')">🔄 Replace</button>
+          <button class="btn btn-red btn-small" onclick="deleteUpload('${u.id}')">🗑️ Delete</button>
+        </div>
       </div>
     </div>
   `).join('');
 }
 
+async function replaceUpload(uploadId) {
+  if (!confirm('Replace this upload? You will need to select a new Excel file.')) return;
+  await deleteUpload(uploadId);
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileInput').click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 // ============ STUDENT VIEW ============
 async function loadStudentResults(student) {
   const el = document.getElementById('studentResult');
-  const semesters = [1, 2];
-  const periods = ['Q1', 'Q2', 'FULL'];
-  
   let html = `<h3>${student.name}</h3><p style="color:#666;">Grade ${student.grade}${student.section}</p>`;
 
-  for (const sem of semesters) {
+  for (const sem of [1, 2]) {
     html += `<h4 style="margin-top:20px;">📘 Semester ${sem}</h4>`;
-    
-    for (const period of periods) {
+    for (const period of ['Q1', 'Q2', 'FULL']) {
       const { data: marks } = await db.from('marks').select('*')
         .eq('student_email', student.email).eq('semester', sem).eq('period', period);
-      
       if (!marks || marks.length === 0) continue;
 
       const { data: result } = await db.from('results').select('*')
@@ -674,9 +774,7 @@ async function loadStudentResults(student) {
 
       html += `<h5 style="margin-top:15px; color:#2196F3;">${period === 'FULL' ? 'Full Semester' : period}</h5>`;
       html += '<table class="marks-table"><tr><th>Subject</th><th>Score</th></tr>';
-      marks.forEach(m => {
-        html += `<tr><td>${m.subject}</td><td>${m.score}/${m.max_score}</td></tr>`;
-      });
+      marks.forEach(m => { html += `<tr><td>${m.subject}</td><td>${m.score}/${m.max_score}</td></tr>`; });
       html += `<tr class="total-row"><td>TOTAL</td><td>${total}/${maxTotal}</td></tr>`;
       if (result) {
         html += `<tr class="total-row"><td>AVERAGE</td><td>${result.average}</td></tr>`;
@@ -686,7 +784,6 @@ async function loadStudentResults(student) {
     }
   }
 
-  // Complaint button
   html += `
     <div style="margin-top:30px; padding-top:20px; border-top:2px solid #ddd;">
       <h4>📢 Report a Problem</h4>
@@ -701,10 +798,9 @@ async function loadStudentResults(student) {
       </select>
       <input type="text" id="cSubject" class="input" placeholder="Subject (e.g., Maths)">
       <textarea id="cMessage" class="input" placeholder="Describe the problem..." rows="3"></textarea>
-      <button class="btn" onclick="submitComplaint('${student.email}')">📤 Submit Complaint</button>
+      <button class="btn btn-block" onclick="submitComplaint('${student.email}')">📤 Submit Complaint</button>
     </div>
   `;
-
   el.innerHTML = html;
 }
 
@@ -713,24 +809,15 @@ async function submitComplaint(studentEmail) {
   const period = document.getElementById('cPeriod').value;
   const subject = document.getElementById('cSubject').value.trim();
   const message = document.getElementById('cMessage').value.trim();
-
-  if (!subject || !message) {
-    alert('Please fill subject and message');
-    return;
-  }
+  if (!subject || !message) { alert('Please fill subject and message'); return; }
 
   const { error } = await db.from('complaints').insert({
-    student_email: studentEmail,
-    semester, period, subject,
-    issue_type: 'Wrong marks',
-    message,
-    status: 'PENDING'
+    student_email: studentEmail, semester, period, subject,
+    issue_type: 'Wrong marks', message, status: 'PENDING'
   });
-
-  if (error) {
-    alert('Error: ' + error.message);
-  } else {
-    alert('✅ Complaint submitted! Director will review it.');
+  if (error) alert('Error: ' + error.message);
+  else {
+    alert('✅ Complaint submitted!');
     document.getElementById('cSubject').value = '';
     document.getElementById('cMessage').value = '';
   }
@@ -740,19 +827,16 @@ async function submitComplaint(studentEmail) {
 async function loadParentChildren(parent) {
   const { data: children } = await db.from('students').select('*').eq('parent_email', parent.email);
   const el = document.getElementById('parentChildren');
-  
   if (!children || children.length === 0) {
-    el.innerHTML = '<p style="color:#666;">No children linked to your account.</p>';
-    return;
+    el.innerHTML = '<p style="color:#666;">No children linked to your account.</p>'; return;
   }
-
   let html = '';
   for (const child of children) {
     html += `
       <div class="child-card">
         <h3>👤 ${child.name}</h3>
         <p style="color:#666;">Grade ${child.grade}${child.section}</p>
-        <button class="btn btn-blue" style="margin-top:10px;" onclick="viewChildResults('${child.email}')">View Full Report</button>
+        <button class="btn btn-blue" onclick="viewChildResults('${child.email}')">View Full Report</button>
         <div id="childResult_${child.email.replace(/[^a-z0-9]/g, '')}" style="margin-top:15px;"></div>
       </div>
     `;
@@ -762,8 +846,6 @@ async function loadParentChildren(parent) {
 
 async function viewChildResults(childEmail) {
   const el = document.getElementById('childResult_' + childEmail.replace(/[^a-z0-9]/g, ''));
-  const { data: child } = await db.from('students').select('*').eq('email', childEmail).single();
-  
   let html = '';
   for (const sem of [1, 2]) {
     for (const period of ['Q1', 'Q2', 'FULL']) {
@@ -778,9 +860,7 @@ async function viewChildResults(childEmail) {
 }
 
 // ============ INIT ============
-db.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session) checkUser();
-});
+db.auth.onAuthStateChange((event, session) => { if (event === 'SIGNED_IN' && session) checkUser(); });
 checkUser();
 </script>
 </body>
